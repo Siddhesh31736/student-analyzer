@@ -57,5 +57,24 @@ npm run dev
 
 ---
 
+## ⚙️ Advanced Configuration
+
+### 1. Frontend API Link
+By default, the frontend points to `http://localhost:5000`. To change this for production:
+- Open `frontend/src/context/AuthContext.jsx` (and other pages).
+- Update the `axios` URLs to your live backend URL.
+
+### 2. Firebase Database Setup
+1. Enable **Cloud Firestore** in your Firebase Console.
+2. Run the deployment command to push security rules:
+   ```bash
+   firebase deploy --only firestore:rules
+   ```
+
+### 3. Initial Admin Setup
+To create the first Admin account, you can use the registration page or manually add a user document to the `users` collection in Firestore with the field `role: "admin"`.
+
+---
+
 ## 📜 License
 This project is for educational and administrative use in school management environments.
