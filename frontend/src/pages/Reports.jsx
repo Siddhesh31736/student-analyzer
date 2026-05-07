@@ -16,7 +16,7 @@ const Reports = () => {
     const fetchStudents = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get('http://localhost:5000/api/students', config);
+        const res = await axios.get('https://student-analyzer-1kn5.onrender.com/api/students', config);
         setStudents(res.data);
       } catch (err) {
         console.error(err);

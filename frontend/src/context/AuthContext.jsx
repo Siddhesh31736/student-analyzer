@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const { data } = await axios.post('https://student-analyzer-1kn5.onrender.com/api/auth/login', { email, password });
       setUser(data);
       localStorage.setItem('user', JSON.stringify(data));
       return { success: true, role: data.role };
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const { data } = await axios.post('http://localhost:5000/api/auth/register', userData);
+      const { data } = await axios.post('https://student-analyzer-1kn5.onrender.com/api/auth/register', userData);
       setUser(data);
       localStorage.setItem('user', JSON.stringify(data));
       return { success: true };

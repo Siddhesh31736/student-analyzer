@@ -1,119 +1,105 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { Moon, Sun, LogOut, User, BarChart2, Shield } from 'lucide-react';
+import { LayoutDashboard, Users, User, LogOut, Menu, X, School } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem('theme') === 'dark'
-  );
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode]);
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
+    setIsMobileMenuOpen(false);
   };
 
+  const isActive = (path) => location.pathname === path;
+
+  const NavLink = ({ to, icon: Icon, children }) => (
+    <Link
+      to={to}
+      onClick={() => setIsMobileMenuOpen(false)}
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+        isActive(to)
+          ? 'bg-primary-500 text-white shadow-lg shadow-primary-500/30'
+          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+      }`}
+    >
+      <Icon size={18} />
+      <span>{children}</span>
+    </Link>
+  );
+
   return (
-    <nav className="sticky top-0 z-50 glass shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded bg-primary-600 text-white flex items-center justify-center">
-                <BarChart2 size={20} />
-              </div>
-              <span className="font-bold text-xl tracking-tight text-gray-900 dark:text-white">
-                EduMetrics
-              </span>
-            </Link>
-          </div>
+    <nav className="glass sticky top-0 z-50 px-4 py-3 mb-6">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2 text-2xl font-bold text-primary-600 dark:text-primary-400">
+          <School size={32} />
+          <span className="hidden sm:inline">EduAnalyzer</span>
+        </Link>
 
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle Dark Mode"
-            >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-2">
+          {user ? (
+            <>
+              {user.role === 'admin' && <NavLink to="/admin" icon={Users}>Admin</NavLink>}
+              {user.role === 'teacher' && <NavLink to="/teacher" icon={LayoutDashboard}>Teacher Dashboard</NavLink>}
+              {user.role === 'student' && <NavLink to="/student" icon={LayoutDashboard}>Student Dashboard</NavLink>}
+              <NavLink to="/profile" icon={User}>Profile</NavLink>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
+              >
+                <LogOut size={18} />
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <div className="flex gap-4">
+              <Link to="/login" className="px-4 py-2 text-gray-600 dark:text-gray-300 font-medium">Login</Link>
+              <Link to="/register" className="px-6 py-2 bg-primary-600 text-white rounded-lg shadow-lg hover:bg-primary-700 transition-all font-medium">Get Started</Link>
+            </div>
+          )}
+        </div>
 
-            {user ? (
-              <div className="flex items-center gap-4">
-                {user.role === 'admin' ? (
-                  <Link 
-                    to="/admin"
-                    className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400"
-                  >
-                    <Shield size={18} />
-                    <span>Admin Panel</span>
-                  </Link>
-                ) : (
-                  <Link 
-                    to={user.role === 'teacher' ? '/teacher' : '/student'}
-                    className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400"
-                  >
-                    <User size={18} />
-                    <span>Dashboard</span>
-                  </Link>
-                )}
-                
-                {user.role === 'teacher' && (
-                  <Link 
-                    to="/reports"
-                    className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400"
-                  >
-                    <BarChart2 size={18} />
-                    <span>Reports</span>
-                  </Link>
-                )}
-                
-                <Link 
-                  to="/profile"
-                  className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400"
-                >
-                  <User size={18} />
-                  <span>Profile</span>
-                </Link>
-
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
-                >
-                  <LogOut size={18} />
-                  <span className="hidden sm:inline">Logout</span>
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors shadow-sm shadow-primary-500/30"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
-          </div>
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden mt-4 pb-4 space-y-2 border-t border-gray-100 dark:border-gray-800 pt-4 animate-slide-down">
+          {user ? (
+            <>
+              {user.role === 'admin' && <NavLink to="/admin" icon={Users}>Admin</NavLink>}
+              {user.role === 'teacher' && <NavLink to="/teacher" icon={LayoutDashboard}>Teacher Dashboard</NavLink>}
+              {user.role === 'student' && <NavLink to="/student" icon={LayoutDashboard}>Student Dashboard</NavLink>}
+              <NavLink to="/profile" icon={User}>Profile</NavLink>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-2 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
+              >
+                <LogOut size={18} />
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col gap-2 px-2">
+              <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 text-gray-600 dark:text-gray-300 font-medium">Login</Link>
+              <Link to="/register" onClick={() => setIsMobileMenuOpen(false)} className="px-4 py-3 bg-primary-600 text-white rounded-lg text-center shadow-lg hover:bg-primary-700 transition-all font-medium">Get Started</Link>
+            </div>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

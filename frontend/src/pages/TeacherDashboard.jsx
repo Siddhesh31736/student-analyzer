@@ -45,8 +45,8 @@ const TeacherDashboard = () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
         const [analyticsRes, studentsRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/analytics', config),
-          axios.get('http://localhost:5000/api/students', config)
+          axios.get('https://student-analyzer-1kn5.onrender.com/api/analytics', config),
+          axios.get('https://student-analyzer-1kn5.onrender.com/api/students', config)
         ]);
         setData(analyticsRes.data);
         setStudents(studentsRes.data);
@@ -81,10 +81,10 @@ const TeacherDashboard = () => {
 
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
-          const res = await axios.post('http://localhost:5000/api/auth/bulk-register', { students: studentsToRegister }, config);
+          const res = await axios.post('https://student-analyzer-1kn5.onrender.com/api/auth/bulk-register', { students: studentsToRegister }, config);
           alert(`Bulk upload complete! Added: ${res.data.results.added}, Skipped: ${res.data.results.skipped}`);
           // Refresh student list
-          const studentsRes = await axios.get('http://localhost:5000/api/students', config);
+          const studentsRes = await axios.get('https://student-analyzer-1kn5.onrender.com/api/students', config);
           setStudents(studentsRes.data);
         } catch (err) {
           console.error(err);
@@ -281,7 +281,7 @@ const TeacherDashboard = () => {
                       }
 
                       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                      await axios.post('http://localhost:5000/api/attendance', { attendanceData: records }, config);
+                      await axios.post('https://student-analyzer-1kn5.onrender.com/api/attendance', { attendanceData: records }, config);
                       alert('Attendance saved successfully!');
                     } catch (err) {
                       console.error(err);
@@ -466,7 +466,7 @@ const TeacherDashboard = () => {
                     setSubmittingFeedback(true);
                     try {
                       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                      await axios.post(`http://localhost:5000/api/students/${selectedStudent.id}/feedback`, { 
+                      await axios.post(`https://student-analyzer-1kn5.onrender.com/api/students/${selectedStudent.id}/feedback`, { 
                         comment: feedbackComment,
                         teacherName: user.name || 'Teacher'
                       }, config);

@@ -14,7 +14,7 @@ const AdminPanel = () => {
   const fetchStudents = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const res = await axios.get('http://localhost:5000/api/students', config);
+      const res = await axios.get('https://student-analyzer-1kn5.onrender.com/api/students', config);
       setStudents(res.data);
     } catch (err) {
       toast.error('Failed to fetch users');
@@ -34,7 +34,7 @@ const AdminPanel = () => {
     if (window.confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.delete(`http://localhost:5000/api/students/${id}`, config);
+        await axios.delete(`https://student-analyzer-1kn5.onrender.com/api/students/${id}`, config);
         toast.success('Student deleted successfully');
         fetchStudents(); // Refresh list
       } catch (err) {
@@ -48,7 +48,7 @@ const AdminPanel = () => {
     e.preventDefault();
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.post('http://localhost:5000/api/auth/add-teacher', newTeacher, config);
+      await axios.post('https://student-analyzer-1kn5.onrender.com/api/auth/add-teacher', newTeacher, config);
       toast.success('Teacher added successfully');
       setNewTeacher({ name: '', email: '', password: '' });
       setIsAddingTeacher(false);

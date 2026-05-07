@@ -50,7 +50,7 @@ const StudentDashboard = () => {
     const fetchStudentData = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get(`http://localhost:5000/api/students/${user.id}`, config);
+        const res = await axios.get(`https://student-analyzer-1kn5.onrender.com/api/students/${user.id}`, config);
         setData(res.data);
         setFormData({
           math: res.data.math || 0,
@@ -70,7 +70,7 @@ const StudentDashboard = () => {
     const fetchAttendance = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const res = await axios.get(`http://localhost:5000/api/attendance/student/${user.id}`, config);
+        const res = await axios.get(`https://student-analyzer-1kn5.onrender.com/api/attendance/student/${user.id}`, config);
         setAttendance(res.data);
       } catch (err) {
         console.error(err);
@@ -92,7 +92,7 @@ const StudentDashboard = () => {
     setSaving(true);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const res = await axios.put(`http://localhost:5000/api/students/${user.id}/grades`, formData, config);
+      const res = await axios.put(`https://student-analyzer-1kn5.onrender.com/api/students/${user.id}/grades`, formData, config);
       setData(res.data);
       setIsEditing(false);
     } catch (err) {

@@ -22,7 +22,7 @@ const Profile = () => {
     setLoading(true);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put('http://localhost:5000/api/auth/update-profile', profileData, config);
+      await axios.put('https://student-analyzer-1kn5.onrender.com/api/auth/update-profile', profileData, config);
       
       // Update local storage and context
       const updatedUser = { ...user, name: profileData.name, email: profileData.email };
@@ -45,7 +45,7 @@ const Profile = () => {
     setLoading(true);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.put('http://localhost:5000/api/auth/update-password', {
+      await axios.put('https://student-analyzer-1kn5.onrender.com/api/auth/update-password', {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       }, config);
